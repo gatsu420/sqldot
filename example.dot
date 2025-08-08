@@ -1,0 +1,6 @@
+digraph {
+	"datamart-staging.fact_events.events_test" -> "events"
+	"datamart-staging.fact_trx.trx_test" -> "trx"
+	"events" -> "breakdown"
+	"trx" -> "breakdown"
+}

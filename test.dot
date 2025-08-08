@@ -1,0 +1,6 @@
+digraph {
+	"public.datamart.another_test_table" -> "trx"
+	"events" -> "summary"
+	"trx" -> "summary"
+	"public.datamart.test_table" -> "events"
+}
