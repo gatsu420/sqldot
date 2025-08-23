@@ -66,3 +66,12 @@ jobs:
               repo: context.repo.repo,
               body: commentBody
             })
+
+  run-docker-image:
+    runs-on: ubuntu-22.04
+    container:
+      image: istifajar/sqldot:v0.2.0
+      options: --user root
+
+    steps:
+      - run: sqldot --output=qq.dot
