@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+permissions:
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -36,3 +39,39 @@ jobs:
 
       - name: test
         run: go test ./...
+
+      - run: ./sqldot --output=qq.dot
+
+      - run: ls
+
+      - id: save_dot_file_content
+        run: |
+          echo "DOTFILE_CONTENT<<EOF" >> $GITHUB_OUTPUT
+          cat qq.dot >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - run: echo "${{ steps.save_dot_file_content.outputs.DOTFILE_CONTENT }}"
+
+      - name: post comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentBody = `
+              ${{ steps.save_dot_file_content.outputs.DOTFILE_CONTENT }}
+            `
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: commentBody
+            })
+
+  run-docker-image:
+    runs-on: ubuntu-22.04
+    container:
+      image: istifajar/sqldot:v0.2.0
+      options: --user root
+
+    steps:
+      - run: sqldot --output=qq.dot

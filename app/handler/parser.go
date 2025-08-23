@@ -24,7 +24,7 @@ func (h *handlerImpl) Parse(dotFilePath string) error {
 			dotFile.Write([]byte(dag))
 		}
 	}
-	dotFile.Write([]byte("}"))
+	dotFile.Write([]byte("}\n"))
 
 	return nil
 }
